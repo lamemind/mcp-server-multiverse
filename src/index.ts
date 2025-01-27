@@ -106,21 +106,8 @@ function convertJsonSchemaToZodShape(schema: any): z.ZodRawShape {
     });
 
     thisServer.tool(
-        cliArguments.prefix + `_` + "calculate-bmi",
-        {
-            weightKg: z.number(),
-            heightM: z.number()
-        },
-        async ({weightKg, heightM}) => ({
-            content: [{
-                type: "text",
-                text: String(weightKg / (heightM * heightM))
-            }]
-        })
-    );
-
-    thisServer.tool(
         cliArguments.prefix + `_` + `echo`,
+        "Just a simple echo tool, will be removed in the future",
         {
             input: z.string()
         },
@@ -135,16 +122,17 @@ function convertJsonSchemaToZodShape(schema: any): z.ZodRawShape {
     const {tools} = await wrappedServer.listTools();
     tools.forEach((tool) => {
         const zodShape = convertJsonSchemaToZodShape(tool.inputSchema);
-        thisServer.tool(
-            cliArguments.prefix + `_` + tool.name,
-            zodShape,
-            async (args: any) => {
-                const res = await wrappedServer.callTool({
-                    name: tool.name,
-                    arguments: args
-                });
-                return res as { content: { type: "text", text: string }[] };
+
+        const prefixedToolName = cliArguments.prefix + `_` + tool.name;
+        const callback = async (args: any) => {
+            const res = await wrappedServer.callTool({
+                name: tool.name,
+                arguments: args
             });
+            return res as { content: { type: "text", text: string }[] };
+        };
+        const description = `[Use this tool only in the "${cliArguments.prefix}" scope] ` + (tool.description || "");
+        thisServer.tool(prefixedToolName, description, zodShape, callback);
     });
 
     const transport = new StdioServerTransport();
