@@ -1,18 +1,21 @@
 import {program} from "commander";
 
 export async function parseCliArguments() {
-    const res = {
+    const cliArgs = {
         wrappedServer: '',
-        prefix: ''
+        prefix: '',
+        watch: false
     };
 
     program
         .argument('<prefix>', 'Prefix')
         .argument('<wrapped-server>', 'Wrapped Server')
-        .action((prefix, wrappedServer) => {
-            res.prefix = prefix;
-            res.wrappedServer = wrappedServer;
-            console.error(wrappedServer);
+        .option('-w, --watch', 'Watch for changes and restart the server')
+        .action((prefix, wrappedServer, options) => {
+            cliArgs.prefix = prefix;
+            cliArgs.wrappedServer = wrappedServer;
+            cliArgs.watch = options.watch;
+            console.error(`Cli Args ${JSON.stringify(cliArgs)}`);
         });
 
     // Aggiungiamo un handler per gli errori
@@ -22,5 +25,5 @@ export async function parseCliArguments() {
 
     program.parse(process.argv);
 
-    return res;
+    return cliArgs;
 }

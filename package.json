@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.4.1",
+    "chokidar": "^4.0.3",
     "commander": "^13.1.0",
     "zod-to-json-schema": "^3.24.1"
   }
