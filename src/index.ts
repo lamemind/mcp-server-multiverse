@@ -85,7 +85,6 @@ function jsonPropsToZodShape(properties: Record<string, any>, required: string[]
     return shape;
 }
 
-// Funzione wrapper per gestire l'intero schema
 function convertJsonSchemaToZodShape(schema: any): z.ZodRawShape {
     if (schema.type !== 'object' || !schema.properties) {
         throw new Error('Schema must be an object type with properties');
@@ -97,8 +96,6 @@ function convertJsonSchemaToZodShape(schema: any): z.ZodRawShape {
 (async function () {
     const cliArguments = await parseCliArguments();
     const wrappedServerArgs = cliArguments.wrappedServer.split(' ');
-
-    const wrappedServer = await openWrappedServer(wrappedServerArgs[0], wrappedServerArgs.slice(1));
 
     const thisServer = new McpServer({
         name: cliArguments.prefix,
@@ -119,21 +116,26 @@ function convertJsonSchemaToZodShape(schema: any): z.ZodRawShape {
         })
     );
 
-    const {tools} = await wrappedServer.listTools();
-    tools.forEach((tool) => {
-        const zodShape = convertJsonSchemaToZodShape(tool.inputSchema);
 
-        const prefixedToolName = cliArguments.prefix + `_` + tool.name;
-        const callback = async (args: any) => {
-            const res = await wrappedServer.callTool({
-                name: tool.name,
-                arguments: args
-            });
-            return res as { content: { type: "text", text: string }[] };
-        };
-        const description = `[Use this tool only in the "${cliArguments.prefix}" scope] ` + (tool.description || "");
-        thisServer.tool(prefixedToolName, description, zodShape, callback);
-    });
+    async function registerWrappedServer(thisServer: any, prefix: string, wrappedServerArgs: string[]) {
+        const wrappedServer = await openWrappedServer(wrappedServerArgs[0], wrappedServerArgs.slice(1));
+        const {tools} = await wrappedServer.listTools();
+        tools.forEach((tool) => {
+            const zodShape = convertJsonSchemaToZodShape(tool.inputSchema);
+
+            const prefixedToolName = cliArguments.prefix + `_` + tool.name;
+            const callback = async (args: any) => {
+                const res = await wrappedServer.callTool({
+                    name: tool.name,
+                    arguments: args
+                });
+                return res as { content: { type: "text", text: string }[] };
+            };
+            const description = `[Use this tool only in the "${cliArguments.prefix}" scope] ` + (tool.description || "");
+            thisServer.tool(prefixedToolName, description, zodShape, callback);
+        });
+    }
+    await registerWrappedServer(thisServer, cliArguments.prefix, wrappedServerArgs);
 
     const transport = new StdioServerTransport();
     await thisServer.connect(transport);
