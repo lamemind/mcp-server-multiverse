@@ -135,24 +135,24 @@ function convertJsonSchemaToZodShape(schema: any): z.ZodRawShape {
         thisServer.tool(prefixedToolName, description, zodShape, callback);
     });
 
-    let counter = 1;
-    setInterval(async () => {
-        const prefixedToolName = cliArguments.prefix + `_` + `new-tool-${counter++}`;
-        const schema = {};
-        thisServer.tool(prefixedToolName,
-            `New tool ${counter}`,
-            schema,
-            async ({}) => {
-                const res = {
-                    content: [{
-                        type: "text",
-                        text: "i am " + counter
-                    }]
-                };
-                return res as { content: { type: "text", text: string }[] };
-            }
-        );
-    }, 5000);
+    // let counter = 1;
+    // setInterval(async () => {
+    //     const prefixedToolName = cliArguments.prefix + `_` + `new-tool-${counter++}`;
+    //     const schema = {};
+    //     thisServer.tool(prefixedToolName,
+    //         `New tool ${counter}`,
+    //         schema,
+    //         async ({}) => {
+    //             const res = {
+    //                 content: [{
+    //                     type: "text",
+    //                     text: "i am " + counter
+    //                 }]
+    //             };
+    //             return res as { content: { type: "text", text: string }[] };
+    //         }
+    //     );
+    // }, 5000);
 
     const transport = new StdioServerTransport();
     await thisServer.connect(transport);
