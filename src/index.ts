@@ -3,6 +3,7 @@ import {parseCliArguments} from "./server-arguments.js";
 import {Client} from "@modelcontextprotocol/sdk/client/index.js";
 import {McpServer} from "@modelcontextprotocol/sdk/server/mcp.js";
 import {z} from "zod";
+import {StdioServerTransport} from "@modelcontextprotocol/sdk/server/stdio.js";
 
 async function openWrappedServer(wrappedCommand: string, wrappedArgs: string[]) {
     const transport = new StdioClientTransport({
@@ -131,7 +132,7 @@ function convertJsonSchemaToZodShape(schema: any): z.ZodRawShape {
         })
     );
 
-    const {tools} = wrappedServer.listTools();
+    const {tools} = await wrappedServer.listTools();
     tools.forEach((tool) => {
         const zodShape = convertJsonSchemaToZodShape(tool.inputSchema);
         thisServer.tool(
@@ -142,22 +143,14 @@ function convertJsonSchemaToZodShape(schema: any): z.ZodRawShape {
                     name: tool.name,
                     arguments: args
                 });
-                return {
-                    content: [{
-                        type: "text",
-                        text: JSON.stringify(res)
-                    }]
-                };
+                return res as { content: { type: "text", text: string }[] };
             });
     });
 
     const transport = new StdioServerTransport();
-    await server.connect(transport);
+    await thisServer.connect(transport);
 
-    server.sendLoggingMessage({
-        level: "info",
-        data: "Server started successfully",
-    });
+    console.error("Server started successfully");
 
 })();
 
