@@ -7,6 +7,7 @@ import path from "node:path";
 import chokidar from 'chokidar';
 
 async function openWrappedServer(serverConfig: ServerConfig) {
+    console.error(`Opening wrapped server with command: ${serverConfig.command} ${serverConfig.args.join(' ')}`);
     const transport = new StdioClientTransport({
         command: serverConfig.command,
         args: serverConfig.args,
@@ -89,10 +90,14 @@ async function registerTools(mainMcpServer: McpServer, mainConfig: WrapperConfig
 }
 
 function instantiateFileWatcher(serverConfig: ServerConfig, fakeServer: any) {
+    console.error(`Setting up file watcher...
+    enabled: ${serverConfig.fileWatch?.enabled}
+    path: ${serverConfig.fileWatch?.path}`);
     if (serverConfig.fileWatch?.enabled) {
         const filepath = serverConfig.fileWatch.path as string;
 
         chokidar.watch(filepath).on('change', async (file, stats) => {
+            console.error(`File watcher triggered for: ${file}`);
             fakeServer.instanceRebuild++;
             console.error(`File ${file} edited - Rebuild #${fakeServer.instanceRebuild}`);
 

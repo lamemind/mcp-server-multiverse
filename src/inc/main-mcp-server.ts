@@ -5,6 +5,8 @@ import {StdioServerTransport} from "@modelcontextprotocol/sdk/server/stdio.js";
 import {WrapperConfig} from "./json-config.js";
 
 async function startMainServer(config: WrapperConfig) {
+    console.error(`Starting main server with name: ${config.serverName}`);
+    console.error(`Initializing main MCP server...`);
     const mainMcpServer = new McpServer({
         name: config.serverName,
         version: "1.0.0"

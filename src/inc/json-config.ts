@@ -36,10 +36,12 @@ type PathResolution = z.infer<typeof PathResolutionSchema>;
 
 // Funzione di validazione
 function validateConfig(config: unknown): WrapperConfig {
+    console.error(`Validating configuration...`);
     return ConfigSchema.parse(config);
 }
 
 function readConfigFile(filePath: string): WrapperConfig {
+    console.error(`Reading config file from: ${filePath}`);
     const jsonContent = fs.readFileSync(filePath, 'utf8');
     const jsonRaw = JSON.parse(jsonContent);
 
