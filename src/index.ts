@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import {parseCliArguments} from "./inc/server-arguments.js";
 import {readConfigFile} from "./inc/json-config.js";
 import {startMainServer} from "./inc/main-mcp-server.js";
