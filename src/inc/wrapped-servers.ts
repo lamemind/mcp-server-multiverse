@@ -27,16 +27,11 @@ async function openWrappedServer(serverConfig: ServerConfig) {
     );
 
     await client.connect(transport);
-
     return client;
-
-    // const prompts = await client.listPrompts();
-    // const resources = await client.listResources();
-    // const tools = await client.listTools();
 }
 
 /**
- * Get the tool name in the main server
+ * Get the tool name to expose from the main server
  * @param config
  * @param toolName
  */
