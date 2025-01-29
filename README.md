@@ -28,9 +28,10 @@ Your `claude_desktop_config.json` file~~~~
 {
   "mcpServers": {
     "side-project": {
-      "command": "node",
-      "args": [ 
-        "/mcp-server-multiverse/dist/index.js",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@lamemind/mcp-server-multiverse@latest",
         "/local-setups/side-project.json"
       ]
     }

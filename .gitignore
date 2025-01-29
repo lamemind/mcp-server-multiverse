@@ -1,6 +1,5 @@
 /node_modules/
 .idea/
-/dist/
 
 # Local Dev Environment
 /local-setups/
