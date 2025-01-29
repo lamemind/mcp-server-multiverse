@@ -228,6 +228,12 @@ Note that `pathResolution` is optional and is only needed if you want to hide th
 }
 ~~~
 
+## To Do
+
+- [ ] Add support for `Prompts`
+- [ ] Add support for `Resources`
+- [ ] Add a GUI for managing multiverse servers
+
 ## Verified Platforms
 
 - [x] Windows
