@@ -52,9 +52,9 @@ function getToolName(config: WrapperConfig, toolName: string) {
 function applyPathResolution(args: any, serverConfig: ServerConfig) {
     serverConfig.pathResolution?.applyTo.forEach((key) => {
         if (args[key]) {
-            // @ts-ignore
-            const fullPath = path.join(serverConfig.pathResolution.root, realArgs[key]);
-            console.error(`Rewriting path ${args[key]} to ${fullPath}`);
+            const root = (serverConfig.pathResolution as any).root;
+            const fullPath = path.join(root, args[key]);
+            console.error(`Rewriting ${key} path ${args[key]} to ${fullPath}`);
             args[key] = fullPath;
         }
     });
