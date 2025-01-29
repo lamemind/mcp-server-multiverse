@@ -27,3 +27,23 @@ export async function parseCliArguments() {
 
     return cliArgs;
 }
+
+export async function parseCliArguments2() {
+    const cliArgs = {
+        setupFile: '',
+    };
+
+    program
+        .argument('<setup-file>', 'Json setup file')
+        .action((setupFile) => {
+            cliArgs.setupFile = setupFile;
+            console.error(`Cli Args ${JSON.stringify(cliArgs)}`);
+        });
+
+    program.on('error', (err) => {
+        console.error('Error:', err);
+    });
+
+    program.parse(process.argv);
+    return cliArgs;
+}
