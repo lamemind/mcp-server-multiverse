@@ -32,7 +32,7 @@ const ConfigSchema = z.object({
 
 // Type inference automatica
 type WrapperConfig = z.infer<typeof ConfigSchema>;
-type Server = z.infer<typeof ServerSchema>;
+type ServerConfig = z.infer<typeof ServerSchema>;
 type PathResolution = z.infer<typeof PathResolutionSchema>;
 type AutoRestart = z.infer<typeof AutoRestartSchema>;
 
@@ -55,4 +55,4 @@ function readConfigFile(filePath: string): WrapperConfig {
     }
 }
 
-export { WrapperConfig, Server, PathResolution, AutoRestart, readConfigFile };
+export { WrapperConfig, ServerConfig, PathResolution, AutoRestart, readConfigFile };
