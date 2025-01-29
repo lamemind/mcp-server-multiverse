@@ -52,9 +52,9 @@ Now add how many multiverse servers you want to run. For example, if you want to
 }
 ```
 
-![demo.png](assets/demo.png)
-
 This config allows Claude Desktop to automatically start the `mcp-server-multiverse` instances when you start the app.
+
+![demo.png](assets/demo.png)
 
 ## Configuration Examples
 
@@ -228,6 +228,13 @@ Note that `pathResolution` is optional and is only needed if you want to hide th
 }
 ~~~
 
-## Usage Examples
+## Verified Platforms
 
+- [x] Windows
+- [ ] macOS
+- [ ] Linux
+
+## License
+
+MIT
 
