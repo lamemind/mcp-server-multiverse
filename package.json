@@ -1,5 +1,5 @@
 {
-  "name": "mcp-server-multiverse",
+  "name": "@lamemind/mcp-server-multiverse",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -10,9 +10,9 @@
     "start": "node dist/index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "author": "lamemind",
+  "license": "MIT",
+  "description": "A middleware server that enables multiple isolated instances of the same MCP servers to coexist independently with unique namespaces and configurations.",
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.10",
@@ -24,5 +24,13 @@
     "chokidar": "^4.0.3",
     "commander": "^13.1.0",
     "zod-to-json-schema": "^3.24.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lamemind/mcp-server-multiverse.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lamemind/mcp-server-multiverse/issues"
+  },
+  "homepage": "https://github.com/lamemind/mcp-server-multiverse#readme"
 }
