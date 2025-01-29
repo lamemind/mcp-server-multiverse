@@ -7,6 +7,12 @@ const PathResolutionSchema = z.object({
     applyTo: z.array(z.string())
 });
 
+// Schema per il file watch
+const FileWatchSchema = z.object({
+    enabled: z.boolean(),
+    path: z.string().optional()
+});
+
 // Schema per l'auto-restart
 const AutoRestartSchema = z.object({
     enabled: z.boolean(),
@@ -19,7 +25,7 @@ const ServerSchema = z.object({
     args: z.array(z.string()),
     pathResolution: PathResolutionSchema.optional(),
     env: z.record(z.string()).optional(),
-    fileWatch: z.boolean().optional(),
+    fileWatch: FileWatchSchema.optional(),
     autoRestart: AutoRestartSchema.optional()
 });
 

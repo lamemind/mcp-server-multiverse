@@ -4,6 +4,7 @@ import {ServerConfig, WrapperConfig} from "./json-config.js";
 import {convertJsonSchemaToZodShape} from "./zod-utils.js";
 import {McpServer} from "@modelcontextprotocol/sdk/server/mcp.js";
 import path from "node:path";
+import chokidar from 'chokidar';
 
 async function openWrappedServer(serverConfig: ServerConfig) {
     const transport = new StdioClientTransport({
@@ -62,10 +63,11 @@ function applyPathResolution(args: any, serverConfig: ServerConfig) {
  * @param wrappedServer
  * @param serverConfig
  */
-async function registerTools(mainMcpServer: McpServer, mainConfig: WrapperConfig, wrappedServer: Client, serverConfig: ServerConfig) {
+async function registerTools(mainMcpServer: McpServer, mainConfig: WrapperConfig,
+                             wrappedServer: any, serverConfig: ServerConfig) {
 
     const {tools} = await wrappedServer.listTools();
-    tools.forEach((tool) => {
+    tools.forEach((tool: { inputSchema: any; name: string; description: any; }) => {
         const zodShape = convertJsonSchemaToZodShape(tool.inputSchema);
         const externalName = getToolName(mainConfig, tool.name);
 
@@ -86,14 +88,43 @@ async function registerTools(mainMcpServer: McpServer, mainConfig: WrapperConfig
 
 }
 
+function instantiateFileWatcher(serverConfig: ServerConfig, fakeServer: any) {
+    if (serverConfig.fileWatch?.enabled) {
+        const filepath = serverConfig.fileWatch.path as string;
+
+        chokidar.watch(filepath).on('change', async (file, stats) => {
+            fakeServer.instanceRebuild++;
+            console.error(`File ${file} edited - Rebuild #${fakeServer.instanceRebuild}`);
+
+            fakeServer.wrappedServerInstance.close();
+            fakeServer.wrappedServerInstance = await openWrappedServer(serverConfig);
+        });
+    }
+}
+
 async function registerWrappedServer(mainMcpServer: McpServer, mainConfig: WrapperConfig, serverConfig: ServerConfig) {
     console.error(`Registering wrapped server ${serverConfig.command} ${serverConfig.args.join(' ')}`);
-    const wrappedServer = await openWrappedServer(serverConfig);
 
-    await registerTools(mainMcpServer, mainConfig, wrappedServer, serverConfig);
+    /**
+     * Fake server is used to allow server instance switch if needed by file watch or auto-restart
+     */
+    const fakeServer = {
+        instanceRebuild: 0,
+        wrappedServerInstance: await openWrappedServer(serverConfig),
+        callTool(args: { name: string, arguments: any }) {
+            return this.wrappedServerInstance.callTool(args);
+        },
+        listTools() {
+            return this.wrappedServerInstance.listTools();
+        }
+    }
+
+    await registerTools(mainMcpServer, mainConfig, fakeServer, serverConfig);
 
     // TODO register resources
     // TODO register prompts
+
+    instantiateFileWatcher(serverConfig, fakeServer);
 }
 
 export {registerWrappedServer, getToolName};
