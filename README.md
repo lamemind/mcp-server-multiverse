@@ -30,7 +30,7 @@ Your `claude_desktop_config.json` file~~~~
     "side-project": {
       "command": "node",
       "args": [ 
-        "/mcp-server-wrapper/dist/index.js",
+        "/mcp-server-multiverse/dist/index.js",
         "/local-setups/side-project.json"
       ]
     }

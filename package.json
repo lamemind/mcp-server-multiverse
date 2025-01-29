@@ -1,5 +1,5 @@
 {
-  "name": "mcp-server-wrapper",
+  "name": "mcp-server-multiverse",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
