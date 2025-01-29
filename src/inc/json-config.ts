@@ -3,30 +3,30 @@ import * as fs from "node:fs";
 
 // Schema per la risoluzione dei path
 const PathResolutionSchema = z.object({
-    root: z.string(),
-    applyTo: z.array(z.string())
+    root: z.string().describe("Root path for the resolution"),
+    applyTo: z.array(z.string()).describe("List of keys to apply the resolution to")
 });
 
 // Schema per il file watch
 const FileWatchSchema = z.object({
-    enabled: z.boolean(),
-    path: z.string().optional()
+    enabled: z.boolean().describe("Whether the file watch is enabled"),
+    path: z.string().optional().describe("Path to watch for changes")
 });
 
 // Schema per un singolo server
 const ServerSchema = z.object({
-    command: z.string(),
-    args: z.array(z.string()),
-    pathResolution: PathResolutionSchema.optional(),
-    env: z.record(z.string()).optional(),
-    fileWatch: FileWatchSchema.optional()
+    command: z.string().describe("Command to run, the same as in 'claude_desktop_config.json'"),
+    args: z.array(z.string()).describe("Arguments to pass to the command, the same as in 'claude_desktop_config.json'"),
+    env: z.record(z.string()).optional().describe("Environment variables to set, the same as in 'claude_desktop_config.json'"),
+    pathResolution: PathResolutionSchema.optional().describe("Relative path resolution configuration"),
+    fileWatch: FileWatchSchema.optional().describe("File watch configuration")
 });
 
 // Schema principale della configurazione
 const ConfigSchema = z.object({
-    serverName: z.string(),
-    functionsPrefix: z.string(),
-    servers: z.array(ServerSchema)
+    serverName: z.string().describe("Name of the server to expose to the client"),
+    functionsPrefix: z.string().describe("Aggregation prefix to use for the functions exposed to the client"),
+    servers: z.array(ServerSchema).describe("List of MCP servers to wrap")
 });
 
 // Type inference automatica
