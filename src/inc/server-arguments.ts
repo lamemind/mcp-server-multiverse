@@ -30,13 +30,13 @@ export async function parseCliArguments() {
 
 export async function parseCliArguments2() {
     const cliArgs = {
-        setupFile: '',
+        configFile: '',
     };
 
     program
-        .argument('<setup-file>', 'Json setup file')
+        .argument('<config-file>', 'Json config file')
         .action((setupFile) => {
-            cliArgs.setupFile = setupFile;
+            cliArgs.configFile = setupFile;
             console.error(`Cli Args ${JSON.stringify(cliArgs)}`);
         });
 
