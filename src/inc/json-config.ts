@@ -13,20 +13,13 @@ const FileWatchSchema = z.object({
     path: z.string().optional()
 });
 
-// Schema per l'auto-restart
-const AutoRestartSchema = z.object({
-    enabled: z.boolean(),
-    everySeconds: z.number().positive()
-});
-
 // Schema per un singolo server
 const ServerSchema = z.object({
     command: z.string(),
     args: z.array(z.string()),
     pathResolution: PathResolutionSchema.optional(),
     env: z.record(z.string()).optional(),
-    fileWatch: FileWatchSchema.optional(),
-    autoRestart: AutoRestartSchema.optional()
+    fileWatch: FileWatchSchema.optional()
 });
 
 // Schema principale della configurazione
@@ -40,7 +33,6 @@ const ConfigSchema = z.object({
 type WrapperConfig = z.infer<typeof ConfigSchema>;
 type ServerConfig = z.infer<typeof ServerSchema>;
 type PathResolution = z.infer<typeof PathResolutionSchema>;
-type AutoRestart = z.infer<typeof AutoRestartSchema>;
 
 // Funzione di validazione
 function validateConfig(config: unknown): WrapperConfig {
@@ -61,4 +53,4 @@ function readConfigFile(filePath: string): WrapperConfig {
     }
 }
 
-export { WrapperConfig, ServerConfig, PathResolution, AutoRestart, readConfigFile };
+export { WrapperConfig, ServerConfig, PathResolution, readConfigFile };
