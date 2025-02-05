@@ -4,20 +4,23 @@ A middleware server that enables multiple isolated instances of the same MCP ser
 
 The Multiverse MCP Server creates isolated operational spaces where identical MCP servers can run simultaneously without conflicts. Each "universe" maintains its own configuration, filesystem access, and function naming, enabling developers to run multiple instances of the same server type while maintaining complete separation between different contexts or projects.
 
-## Features
+## Key Features
 
-* Run multiple instances of the same MCP server type independently and simultaneously
-  * multiple `mcp-server-mysql` to point to different databases
-  * multiple `mcp-server-git` with different PAT (Personal Access Token)
-  * multiple `mcp-server-filesystem` with different root paths
-* Automatic server restart on file changes (a blessing for development)
-* JSON-based configuration system
-* Isolate filesystem access per server instance
-* Absolute path obfuscation and automatic resolution
-* Tool name prefixing for conflict prevention
-* Separate configuration management for each instance
-* Independent operational contexts per instance
-* Cross-instance resource isolation
+### Run Multiple Instances
+Run multiple instances of the same MCP server type independently and simultaneously. Each instance operates in its own isolated universe with separate configurations. This enables scenarios like:
+- Multiple MySQL servers `mcp-server-mysql` pointing to different databases
+- Multiple Git servers `mcp-server-git` with different Personal Access Tokens
+- Multiple filesystem servers `mcp-server-filesystem` accessing different root paths
+
+### Automatic Server Restart
+Register your MCP server with file watching capability during development. When enabled, the server automatically detects changes in the specified directory and performs a graceful restart, making development and testing seamless.
+
+### JSON-based Configuration System
+Define your multiverse setup using a simple and flexible JSON configuration format. Each server instance can be configured with its own:
+- Command and arguments
+- Environment variables
+- Path resolution rules
+- File watching settings
 
 ## Installation
 
