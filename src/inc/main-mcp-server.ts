@@ -12,8 +12,6 @@ async function startMainServer(config: WrapperConfig) {
         version: "1.0.0"
     });
 
-    addTestTool(mainMcpServer, config);
-
     for (const wrappedConfig of config.servers) {
         await registerWrappedServer(mainMcpServer, config, wrappedConfig);
     }
@@ -24,41 +22,11 @@ async function startMainServer(config: WrapperConfig) {
     console.error("Server started successfully");
 }
 
-function addTestTool(mainMcpServer: McpServer, config: WrapperConfig) {
-    mainMcpServer.tool(
-        getToolName(config, 'echo'),
-        "Just a simple echo tool, will be removed in the future",
-        {
-            input: z.string()
-        },
-        async ({input}) => ({
-            content: [{
-                type: "text",
-                text: "you said: " + input
-            }]
-        })
-    );
-}
-
 async function startMainServerOld({prefix, wrappedServerArgs}: { prefix: string, wrappedServerArgs: string[] }) {
     const mainMcpServer = new McpServer({
         name: prefix,
         version: "1.0.0"
     });
-
-    mainMcpServer.tool(
-        prefix + `_` + `echo`,
-        "Just a simple echo tool, will be removed in the future",
-        {
-            input: z.string()
-        },
-        async ({input}) => ({
-            content: [{
-                type: "text",
-                text: "you said: " + input
-            }]
-        })
-    );
 
     // async function registerWrappedServer(thisServer: any, prefix: string, wrappedServerArgs: string[]) {
     //     const wrappedServer = await openWrappedServer(wrappedServerArgs[0], wrappedServerArgs.slice(1));
