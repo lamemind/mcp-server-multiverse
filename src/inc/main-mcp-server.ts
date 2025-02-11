@@ -22,16 +22,4 @@ async function startMainServer(config: WrapperConfig) {
     console.error("Server started successfully");
 }
 
-async function startMainServerOld({prefix, wrappedServerArgs}: { prefix: string, wrappedServerArgs: string[] }) {
-    const mainMcpServer = new McpServer({
-        name: prefix,
-        version: "1.0.0"
-    });
-
-    const transport = new StdioServerTransport();
-    await mainMcpServer.connect(transport);
-
-    console.error("Server started successfully");
-}
-
 export {startMainServer};
