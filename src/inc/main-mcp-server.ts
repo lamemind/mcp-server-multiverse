@@ -28,26 +28,6 @@ async function startMainServerOld({prefix, wrappedServerArgs}: { prefix: string,
         version: "1.0.0"
     });
 
-    // async function registerWrappedServer(thisServer: any, prefix: string, wrappedServerArgs: string[]) {
-    //     const wrappedServer = await openWrappedServer(wrappedServerArgs[0], wrappedServerArgs.slice(1));
-    //     const {tools} = await wrappedServer.listTools();
-    //     tools.forEach((tool) => {
-    //         const zodShape = convertJsonSchemaToZodShape(tool.inputSchema);
-    //
-    //         const prefixedToolName = prefix + `_` + tool.name;
-    //         const callback = async (args: any) => {
-    //             const res = await wrappedServer.callTool({
-    //                 name: tool.name,
-    //                 arguments: args
-    //             });
-    //             return res as { content: { type: "text", text: string }[] };
-    //         };
-    //         const description = `[Use this tool only in the "${prefix}" scope] ` + (tool.description || "");
-    //         thisServer.tool(prefixedToolName, description, zodShape, callback);
-    //     });
-    // }
-    // await registerWrappedServer(mainMcpServer, prefix, wrappedServerArgs);
-
     const transport = new StdioServerTransport();
     await mainMcpServer.connect(transport);
 
