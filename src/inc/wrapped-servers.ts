@@ -108,6 +108,12 @@ function instantiateFileWatcher(serverConfig: ServerConfig, fakeServer: any) {
 }
 
 async function registerWrappedServer(mainMcpServer: McpServer, mainConfig: WrapperConfig, serverConfig: ServerConfig) {
+    // Skip registration if the server is disabled
+    if (serverConfig.enabled === false) {
+        console.error(`Skipping disabled server: ${serverConfig.command} ${serverConfig.args.join(' ')}`);
+        return;
+    }
+
     console.error(`Registering wrapped server ${serverConfig.command} ${serverConfig.args.join(' ')}`);
 
     /**
