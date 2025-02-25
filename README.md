@@ -167,6 +167,78 @@ Your `multiverse.json` file
 }
 ~~~
 
+### Hiding specific functions with the `hideFunctions` option
+
+You can selectively hide specific functions from wrapped servers using the `hideFunctions` array. This is useful when you want to use a server but restrict access to certain potentially dangerous or unnecessary functions.
+
+The `hideFunctions` array accepts a list of function names that should be hidden from the wrapped server. When a function is hidden:
+- It won't be registered with the main MCP server
+- It won't be available to the client (e.g., Claude Desktop)
+- It won't appear in the list of available functions
+
+This feature is particularly useful for:
+- Restricting access to potentially dangerous functions (e.g., `delete_repository` in GitHub)
+- Simplifying the interface by hiding rarely used functions
+- Creating different permission levels for different server instances
+
+~~~JSON
+{
+  "serverName": "GitHubWithRestrictions",
+  "functionsPrefix": "github",
+  "servers": [
+    {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github@latest"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<your-personal-access-token>"
+      },
+      "hideFunctions": [
+        "create_repository",
+        "delete_repository",
+        "create_issue"
+      ]
+    }
+  ]
+}
+~~~
+
+In this example, the GitHub server will start normally, but the functions `create_repository`, `delete_repository`, and `create_issue` will be hidden and unavailable to the client.
+
+
+### Disabling specific servers with the `enabled` flag
+
+You can selectively disable specific servers in your configuration without removing them from the JSON file by setting the `enabled` flag to `false`. This is useful for temporarily disabling servers during development or testing.
+~~~JSON
+{
+  "serverName": "MySideProject",
+  "functionsPrefix": "side-project",
+  "servers": [
+    {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem@latest",
+        "/full/path/to/side-project"
+      ],
+      "hideFunctions": [ "write_file" ]
+    },
+    {
+      "enabled": false,
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github@latest"
+      ]
+    }
+  ]
+}
+~~~
+
+In this example, the first server (filesystem) will start but the function `write_file` has been hidden, the second server (GitHub) is disabled and won't be started.
+
 ### Full example of a `multiverse.json` file
 
 This example demonstrates how to create a multiverse server with multiple instances of different server types.
@@ -246,4 +318,3 @@ Note that `pathResolution` is optional and is only needed if you want to hide th
 ## License
 
 MIT
-
