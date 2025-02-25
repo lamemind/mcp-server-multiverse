@@ -69,6 +69,12 @@ async function registerTools(mainMcpServer: McpServer, mainConfig: WrapperConfig
 
     const {tools} = await wrappedServer.listTools();
     tools.forEach((tool: { inputSchema: any; name: string; description: any; }) => {
+        // Skip functions that are in the hideFunctions list
+        if (serverConfig.hideFunctions && serverConfig.hideFunctions.includes(tool.name)) {
+            console.error(`Skipping hidden function: ${tool.name}`);
+            return;
+        }
+        
         const zodShape = convertJsonSchemaToZodShape(tool.inputSchema);
         const externalName = getToolName(mainConfig, tool.name);
 

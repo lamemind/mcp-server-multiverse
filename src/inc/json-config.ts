@@ -20,7 +20,8 @@ const ServerSchema = z.object({
     args: z.array(z.string()).describe("Arguments to pass to the command, the same as in 'claude_desktop_config.json'"),
     env: z.record(z.string()).optional().describe("Environment variables to set, the same as in 'claude_desktop_config.json'"),
     pathResolution: PathResolutionSchema.optional().describe("Relative path resolution configuration"),
-    fileWatch: FileWatchSchema.optional().describe("File watch configuration")
+    fileWatch: FileWatchSchema.optional().describe("File watch configuration"),
+    hideFunctions: z.array(z.string()).optional().describe("List of function names to hide from this server")
 });
 
 // Schema principale della configurazione
