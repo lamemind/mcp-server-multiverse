@@ -56,6 +56,11 @@ function applyPathResolution(args, serverConfig) {
 async function registerTools(mainMcpServer, mainConfig, wrappedServer, serverConfig) {
     const { tools } = await wrappedServer.listTools();
     tools.forEach((tool) => {
+        // Skip functions that are in the hideFunctions list
+        if (serverConfig.hideFunctions && serverConfig.hideFunctions.includes(tool.name)) {
+            console.error(`Skipping hidden function: ${tool.name}`);
+            return;
+        }
         const zodShape = convertJsonSchemaToZodShape(tool.inputSchema);
         const externalName = getToolName(mainConfig, tool.name);
         const callback = async (args) => {
@@ -86,6 +91,11 @@ function instantiateFileWatcher(serverConfig, fakeServer) {
     }
 }
 async function registerWrappedServer(mainMcpServer, mainConfig, serverConfig) {
+    // Skip registration if the server is disabled
+    if (serverConfig.enabled === false) {
+        console.error(`Skipping disabled server: ${serverConfig.command} ${serverConfig.args.join(' ')}`);
+        return;
+    }
     console.error(`Registering wrapped server ${serverConfig.command} ${serverConfig.args.join(' ')}`);
     /**
      * Fake server is used to allow server instance switch if needed by file watch or auto-restart
