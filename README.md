@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/lamemind-mcp-server-multiverse-badge.png)](https://mseep.ai/app/lamemind-mcp-server-multiverse)
+
 # Multiverse MCP Server
 
 A middleware server that enables multiple isolated instances of the same MCP servers to coexist independently with unique namespaces and configurations.
