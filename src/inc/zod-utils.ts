@@ -43,6 +43,7 @@ function convertPropertyToZod(propSchema: any, isRequired: boolean = true): z.Zo
 function jsonPropsToZodShape(properties: Record<string, any>, required: string[] = []): z.ZodRawShape {
     const shape: z.ZodRawShape = {};
 
+    if (properties && typeof properties === 'object')
     for (const [key, propSchema] of Object.entries(properties)) {
         const isRequired = required.includes(key);
         shape[key] = convertPropertyToZod(propSchema, isRequired);
