@@ -7,7 +7,27 @@ async function startMainServer(config) {
     const mainMcpServer = new McpServer({
         name: config.serverName,
         version: "1.0.0"
+    }, {
+        capabilities: {
+            prompts: {},
+            resources: {}
+        }
     });
+    mainMcpServer.prompt(`${config.serverName}_placeholder`, {}, ({}) => ({
+        messages: [{
+                role: "user",
+                content: {
+                    type: "text",
+                    text: `this is a placeholder prompt to avoid error logs when no prompts are registered`
+                }
+            }]
+    }));
+    mainMcpServer.resource(`${config.serverName}_placeholder`, `placeholder://${config.serverName}`, async (uri) => ({
+        contents: [{
+                uri: uri.href,
+                text: `This is a placeholder resource to avoid error logs when no resources are registered`
+            }]
+    }));
     for (const wrappedConfig of config.servers) {
         await registerWrappedServer(mainMcpServer, config, wrappedConfig);
     }
