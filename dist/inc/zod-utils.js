@@ -34,14 +34,17 @@ function convertPropertyToZod(propSchema, isRequired = true) {
         default:
             schema = z.any();
     }
+    if (propSchema.description)
+        schema = schema.describe(propSchema.description);
     return isRequired ? schema : schema.optional();
 }
 function jsonPropsToZodShape(properties, required = []) {
     const shape = {};
-    for (const [key, propSchema] of Object.entries(properties)) {
-        const isRequired = required.includes(key);
-        shape[key] = convertPropertyToZod(propSchema, isRequired);
-    }
+    if (properties && typeof properties === 'object')
+        for (const [key, propSchema] of Object.entries(properties)) {
+            const isRequired = required.includes(key);
+            shape[key] = convertPropertyToZod(propSchema, isRequired);
+        }
     return shape;
 }
 function convertJsonSchemaToZodShape(schema) {
