@@ -1,4 +1,4 @@
-import {z} from "zod";
+import { z } from "zod";
 
 function convertPropertyToZod(propSchema: any, isRequired: boolean = true): z.ZodType {
     let schema: z.ZodType;
@@ -60,4 +60,4 @@ function convertJsonSchemaToZodShape(schema: any): z.ZodRawShape {
     return jsonPropsToZodShape(schema.properties, schema.required || []);
 }
 
-export {convertJsonSchemaToZodShape};
+export { convertJsonSchemaToZodShape };
