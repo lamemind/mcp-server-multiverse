@@ -37,6 +37,9 @@ function convertPropertyToZod(propSchema: any, isRequired: boolean = true): z.Zo
             schema = z.any();
     }
 
+    if (propSchema.description)
+        schema = schema.describe(propSchema.description);
+
     return isRequired ? schema : schema.optional();
 }
 
@@ -44,10 +47,10 @@ function jsonPropsToZodShape(properties: Record<string, any>, required: string[]
     const shape: z.ZodRawShape = {};
 
     if (properties && typeof properties === 'object')
-    for (const [key, propSchema] of Object.entries(properties)) {
-        const isRequired = required.includes(key);
-        shape[key] = convertPropertyToZod(propSchema, isRequired);
-    }
+        for (const [key, propSchema] of Object.entries(properties)) {
+            const isRequired = required.includes(key);
+            shape[key] = convertPropertyToZod(propSchema, isRequired);
+        }
 
     return shape;
 }
