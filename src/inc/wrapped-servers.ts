@@ -1,10 +1,11 @@
-import {Client} from "@modelcontextprotocol/sdk/client/index.js";
-import {StdioClientTransport} from "@modelcontextprotocol/sdk/client/stdio.js";
-import {ServerConfig, WrapperConfig} from "./json-config.js";
-import {convertJsonSchemaToZodShape} from "./zod-utils.js";
-import {McpServer} from "@modelcontextprotocol/sdk/server/mcp.js";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { ServerConfig, WrapperConfig } from "./json-config.js";
+import { convertJsonSchemaToZodShape } from "./zod-utils.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import path from "node:path";
 import chokidar from 'chokidar';
+import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 
 async function openWrappedServer(serverConfig: ServerConfig) {
     console.error(`Opening wrapped server with command: ${serverConfig.command} ${serverConfig.args.join(' ')}`);
@@ -65,20 +66,20 @@ function applyPathResolution(args: any, serverConfig: ServerConfig) {
  * @param serverConfig
  */
 async function registerTools(mainMcpServer: McpServer, mainConfig: WrapperConfig,
-                             wrappedServer: any, serverConfig: ServerConfig) {
+    wrappedServer: any, serverConfig: ServerConfig) {
 
-    const {tools} = await wrappedServer.listTools();
+    const { tools } = await wrappedServer.listTools();
     tools.forEach((tool: { inputSchema: any; name: string; description: any; }) => {
         // Skip functions that are in the hideFunctions list
         if (serverConfig.hideFunctions && serverConfig.hideFunctions.includes(tool.name)) {
             console.error(`Skipping hidden function: ${tool.name}`);
             return;
         }
-        
+
         const zodShape = convertJsonSchemaToZodShape(tool.inputSchema);
         const externalName = getToolName(mainConfig, tool.name);
 
-        const callback = async (args: any) => {
+        const callback = async (args: any): Promise<CallToolResult> => {
             applyPathResolution(args, serverConfig);
 
             const res = await wrappedServer.callTool({
@@ -144,4 +145,4 @@ async function registerWrappedServer(mainMcpServer: McpServer, mainConfig: Wrapp
     instantiateFileWatcher(serverConfig, fakeServer);
 }
 
-export {registerWrappedServer, getToolName};
+export { registerWrappedServer, getToolName };
