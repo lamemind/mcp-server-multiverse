@@ -1,5 +1,7 @@
 # Multiverse MCP Server
 
+[![smithery badge](https://smithery.ai/badge/@lamemind/mcp-server-multiverse)](https://smithery.ai/server/@lamemind/mcp-server-multiverse)
+
 A middleware server that enables multiple isolated instances of the same MCP servers to coexist independently with unique namespaces and configurations.
 
 The Multiverse MCP Server creates isolated operational spaces where identical MCP servers can run simultaneously without conflicts. Each "universe" maintains its own configuration, filesystem access, and function naming, enabling developers to run multiple instances of the same server type while maintaining complete separation between different contexts or projects.
@@ -23,6 +25,16 @@ Define your multiverse setup using a simple and flexible JSON configuration form
 - File watching settings
 
 ## Installation
+
+### Installing via Smithery
+
+To install Multiverse MCP Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@lamemind/mcp-server-multiverse):
+
+```bash
+npx -y @smithery/cli install @lamemind/mcp-server-multiverse --client claude
+```
+
+### Installing manually
 
 First, ensure you've downloaded and installed the [Claude Desktop app](https://claude.ai/download) and you have npm installed.
 
