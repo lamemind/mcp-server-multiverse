@@ -1,4 +1,5 @@
 # Multiverse MCP Server
+[![Trust Score](https://archestra.ai/mcp-catalog/api/badge/quality/lamemind/mcp-server-multiverse)](https://archestra.ai/mcp-catalog/lamemind__mcp-server-multiverse)
 
 A middleware server that enables multiple isolated instances of the same MCP servers to coexist independently with unique namespaces and configurations.
 
