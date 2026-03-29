@@ -22,6 +22,10 @@ Define your multiverse setup using a simple and flexible JSON configuration form
 - Path resolution rules
 - File watching settings
 
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/lamemind-mcp-server-multiverse).
+
 ## Installation
 
 First, ensure you've downloaded and installed the [Claude Desktop app](https://claude.ai/download) and you have npm installed.
